@@ -585,7 +585,7 @@ class Docker {
                 }
 
                 if (config.cpu > 0) {
-                    Container.HostConfig.CpuQuota: 1000;
+                    Container.HostConfig.CpuQuota = config.cpu * 1000;
                 }
 
                 DockerController.createContainer(Container, (err, container) => {
