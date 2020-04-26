@@ -426,7 +426,6 @@ class Docker {
 
         const ContainerConfiguration = {
             BlkioWeight: config.io,
-            CpuShares: _.get(config, 'cpu_shares', 1024),
             Memory: Math.round(this.hardlimit(config.memory) * 1000000),
             MemoryReservation: Math.round(config.memory * 1000000),
             MemorySwap: -1,
@@ -439,6 +438,7 @@ class Docker {
         if (config.cpu > 0) {
             ContainerConfiguration.CpuQuota = config.cpu * 1000;
             ContainerConfiguration.CpuPeriod = 100000;
+            ContainerConfiguration.CpuShares = _.get(config, 'cpu_shares', 1024);
         }
 
         this.container.update(ContainerConfiguration, next);
@@ -558,7 +558,6 @@ class Docker {
                         Memory: Math.round(this.hardlimit(config.memory) * 1000000),
                         MemoryReservation: Math.round(config.memory * 1000000),
                         MemorySwap: -1,
-                        CpuShares: _.get(config, 'cpu_shares', 1024),
                         BlkioWeight: config.io,
                         Dns: Config.get('docker.dns', ['8.8.8.8', '8.8.4.4']),
                         LogConfig: {
@@ -586,6 +585,7 @@ class Docker {
                 if (config.cpu > 0) {
                     Container.HostConfig.CpuQuota = config.cpu * 1000;
                     Container.HostConfig.CpuPeriod = 100000;
+                    Container.HostConfig.CpuShares = _.get(config, 'cpu_shares', 1024);
                 }
 
                 DockerController.createContainer(Container, (err, container) => {
